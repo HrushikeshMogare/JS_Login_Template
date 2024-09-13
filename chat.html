@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+</head>
+<body>
+    <h1>Login</h1>
+    
+    <div id="login-container">
+        <form id="login-form" onsubmit="validateForm(event)">
+            <label for="username">Username: </label>
+            <input type="text" id="username" name="username" placeholder="Enter your username"><br><br>
+            
+            <label for="password">Password: </label> 
+            <input type="password" id="password" name="password" placeholder="Enter your password"><br><br>
+            
+            <input type="submit" value="Login"><br>
+        </form>
+    </div>
+
+    <div id="welcome-container" style="display: none;">
+        <h2>Welcome, <span id="user"></span>!</h2>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        function validateForm(event) {
+            event.preventDefault(); 
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'admin' && password === 'password') {
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('username', username);
+                alert('Login successful');
+                showWelcomeMessage();
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+        function showWelcomeMessage() {
+            const loggedIn = localStorage.getItem('loggedIn');
+            const username = localStorage.getItem('username');
+            
+            if (loggedIn === 'true') {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('welcome-container').style.display = 'block';
+                document.getElementById('user').innerText = username;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('username');
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('welcome-container').style.display = 'none';
+        }
+
+        // Automatically check if the user is already logged in
+        window.onload = showWelcomeMessage;
+    </script>
+</body>
+</html>
